@@ -30,9 +30,12 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: execute cosway cmd
         run: cowsay -f dragon "Run for cover, Iam a drago .... RAWR" >> dragon.txt
+        
       - name: Test File exists
         run: grep -i "dragon" dragon.txt
+        
       - name: Read file
         run: cat dragon.txt
+        
       - name: List repo files
         run: ls -ltra
