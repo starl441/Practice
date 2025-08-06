@@ -1,0 +1,45 @@
+name: Generate ASCII
+
+on: push
+
+jobs:
+  build-job:
+    runs-on: ubuntu-latest
+    steps:
+      -uses: actions/checkout@v4
+
+      -name: Installing cowsay
+       run: sudo apt install cowsay
+      -name: Creating file
+       run: cowsay "Hello from cowsay" > design.txt
+      -uses: actions/upload-artifact@v3
+       with:
+        name: designfile
+        path: design.txt
+      
+
+  test-job:
+    uses: build-job
+    runs-on: ubuntu-latest
+    steps: 
+      -uses:  actions/checkout@v4 
+      -name:  checking file
+       run: |
+       [ -f design.txt ] && echo "File exists" || echo "File does not exist"
+       ls -l
+      -uses: actions/download-artifact@v3
+       with:
+        name: designfile
+  deploy-job:
+    uses: test-job
+    runs-on: ubuntu-latest
+    steps: 
+      -uses: actions/checkout@v4 
+      -uses: actions/download-artifact@v3
+       with:
+        name: designfile
+      -name: read file
+       run: cat design.txt
+
+
+
